@@ -24,5 +24,12 @@ block content
                       td= book.author
                       td= book.genre
                       td= book.year
+      br
+      if pages
+        div(style="float:right")
+          - var n = 1
+          while n <= pages
+            a(class="button pagination" href="/books/page/" + n)= n++
+
     else
       div(class="error") We could not find any books.

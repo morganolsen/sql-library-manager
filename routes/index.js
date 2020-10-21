@@ -24,7 +24,22 @@ router.get('/', asyncHandler(async(req, res, next) => {
 // GET all books
 router.get('/books', asyncHandler(async(req, res, next) => {
   const books = await Book.findAll();
-  res.render('index', {books, title: "All books"});
+  const amount = books.length;
+  const pages = Math.ceil(amount / 10);
+  if(books.length > 10)
+  {
+    books.length = 10;
+  }
+  res.render('index', {books, title: "All books", pages});
+}));
+
+router.get('/books/page/:page', asyncHandler(async(req, res, next) => {
+  const bookCount = await Book.count();
+  const pages = Math.ceil(bookCount / 10);
+  const limit = parseInt(req.params.page) * 10;
+  const offset = limit - 10;
+  const books = await Book.findAll({offset, limit});
+  res.render('index', {books, title: "All books", pages});
 }));
 
 // GET new book page
